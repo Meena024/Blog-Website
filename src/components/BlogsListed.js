@@ -11,7 +11,6 @@ const BlogsListed = () => {
   const editHandler = (blog) => {
     setBlogToEdit(blog);
     setShowPostForm(true);
-    deleteHandler(blog.id);
   };
 
   const HandlerToHideForm = () => setShowPostForm(false);
@@ -25,7 +24,7 @@ const BlogsListed = () => {
       {BlogsList.map((blog) => (
         <div key={blog.id} className={classes.blog}>
           <h2>{blog.title}</h2>
-          <img src={blog.Url} />
+          <img src={blog.url} alt={blog.title} />
           <p>{blog.description}</p>
           <button onClick={() => editHandler(blog)}>Edit</button>
           <button onClick={() => deleteHandler(blog.id)}>Delete</button>

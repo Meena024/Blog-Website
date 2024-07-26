@@ -5,3 +5,11 @@
   margin: 3%;
   padding: 2%;
 }
+
+.blog p {
+  font-size: large;
+}
+
+.blog img {
+  width: 750px;
+}

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Card from "./UI/Card";
 import Context from "../Store/Context";
 
@@ -11,6 +11,14 @@ const PostForm = (props) => {
   const [description, setDescription] = useState(
     blogToEdit ? blogToEdit.description : ""
   );
+
+  useEffect(() => {
+    if (blogToEdit) {
+      setUrl(blogToEdit.url);
+      setTitle(blogToEdit.title);
+      setDescription(blogToEdit.description);
+    }
+  }, [blogToEdit]);
 
   const postHandler = (e) => {
     e.preventDefault();
@@ -25,8 +33,9 @@ const PostForm = (props) => {
       setBlogsList((prevBlogs) =>
         prevBlogs.map((item) => (item.id === blogToEdit.id ? blog : item))
       );
+    } else {
+      setBlogsList((prevBlogs) => [...prevBlogs, blog]);
     }
-    setBlogsList((prevBlogs) => [...prevBlogs, blog]);
     setUrl("");
     setTitle("");
     setDescription("");
@@ -69,7 +78,9 @@ const PostForm = (props) => {
           </div>
           <br />
           <button type="submit">{blogToEdit ? "Update" : "Post"}</button>
-          <button onClick={() => props.onClose()}>Close</button>
+          <button onClick={() => props.onClose()}>
+            {blogToEdit ? "Delete" : "Cancel"}
+          </button>
         </form>
       </div>
     </Card>

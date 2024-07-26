@@ -1,0 +1,19 @@
+.card {
+  color: purple;
+  border-radius: 12px;
+  background-color: antiquewhite;
+  border-width: 2%;
+  text-align: center;
+  padding: 5%;
+  margin: 3%;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.card button {
+  background-color: purple;
+  border-radius: 12px;
+  border-color: black;
+  color: white;
+  padding: 2%;
+  margin: 2%;
+}

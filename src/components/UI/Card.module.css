@@ -2,10 +2,9 @@
   color: purple;
   border-radius: 12px;
   background-color: antiquewhite;
-  border-width: 2%;
   text-align: center;
-  padding: 5%;
-  margin: 3%;
+  padding: 2%;
+  margin: 2%;
   font-family: "Times New Roman", Times, serif;
 }
 
@@ -14,6 +13,6 @@
   border-radius: 12px;
   border-color: black;
   color: white;
-  padding: 2%;
+  padding: 1%;
   margin: 2%;
 }

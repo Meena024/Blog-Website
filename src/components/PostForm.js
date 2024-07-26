@@ -3,20 +3,29 @@ import Card from "./UI/Card";
 import Context from "../Store/Context";
 
 const PostForm = (props) => {
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
+  const { setBlogsList } = useContext(Context);
+  const { blogToEdit } = props;
 
-  const { BlogsList, setBlogsList } = useContext(Context);
+  const [title, setTitle] = useState(blogToEdit ? blogToEdit.title : "");
+  const [url, setUrl] = useState(blogToEdit ? blogToEdit.url : "");
+  const [description, setDescription] = useState(
+    blogToEdit ? blogToEdit.description : ""
+  );
 
   const postHandler = (e) => {
     e.preventDefault();
     const blog = {
-      id: Date.now().toString(),
+      id: blogToEdit ? blogToEdit.id : Date.now().toString(),
       title: title,
       url: url,
       description: description,
     };
+
+    if (blogToEdit) {
+      setBlogsList((prevBlogs) =>
+        prevBlogs.map((item) => (item.id === blogToEdit.id ? blog : item))
+      );
+    }
     setBlogsList((prevBlogs) => [...prevBlogs, blog]);
     setUrl("");
     setTitle("");
@@ -59,7 +68,7 @@ const PostForm = (props) => {
             />
           </div>
           <br />
-          <button type="submit">Post</button>
+          <button type="submit">{blogToEdit ? "Update" : "Post"}</button>
           <button onClick={() => props.onClose()}>Close</button>
         </form>
       </div>

@@ -1,7 +1,8 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import ReactDOM from "react-dom";
 import PostForm from "../PostForm";
 import classes from "./modal.module.css";
+import Context from "../../Store/Context";
 
 const Modal = (props) => {
   const portalElement = document.getElementById("overlay");
@@ -11,9 +12,10 @@ const Modal = (props) => {
   };
 
   const ModalOverlay = (props) => {
+    const { blogToEdit } = useContext(Context);
     return (
       <div className={classes.modal}>
-        <PostForm onClose={props.onClose} />
+        <PostForm blogToEdit={blogToEdit} onClose={props.onClose} />
       </div>
     );
   };

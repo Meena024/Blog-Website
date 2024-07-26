@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Card from "./UI/Card";
 import Modal from "./UI/Modal";
+import Context from "../Store/Context";
 
 const Header = () => {
   const [showForm, setShowForm] = useState(false);
+  const { setBlogToEdit } = useContext(Context);
 
-  const HandlerToShowForm = () => setShowForm(true);
+  const HandlerToShowForm = () => {
+    setBlogToEdit(null);
+    setShowForm(true);
+  };
   const HandlerToHideForm = () => setShowForm(false);
 
   return (

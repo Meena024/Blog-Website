@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import ReactDOM from "react-dom";
+import PostForm from "../PostForm";
 import classes from "./modal.module.css";
 
 const Modal = (props) => {
@@ -10,7 +11,11 @@ const Modal = (props) => {
   };
 
   const ModalOverlay = (props) => {
-    return <div className={classes.modal}></div>;
+    return (
+      <div className={classes.modal}>
+        <PostForm onClose={props.onClose} />
+      </div>
+    );
   };
 
   return (

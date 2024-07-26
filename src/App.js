@@ -1,12 +1,13 @@
 import Header from "./components/Header";
 import BlogsListed from "./components/BlogsListed";
+import Provider from "./Store/Provider";
 
 function App() {
   return (
-    <div>
+    <Provider>
       <Header />
       <BlogsListed />
-    </div>
+    </Provider>
   );
 }
 

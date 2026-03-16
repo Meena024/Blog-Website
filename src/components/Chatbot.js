@@ -1,6 +1,10 @@
 import { useState } from "react";
 import Card from "./UI/Card";
 import styles from "./Chatbot.module.css";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
+console.log(process.env.REACT_APP_GEMINI_API_KEY);
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -8,35 +12,47 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState("");
 
-  const getBotResponse = (question) => {
-    const q = question.toLowerCase();
-
-    if (q.includes("add")) {
-      return "Click 'Add New Blog' button in the header to create a new blog.";
-    }
-
-    if (q.includes("edit")) {
-      return "Press the Edit button on the blog you want to modify.";
-    }
-
-    if (q.includes("delete")) {
-      return "Click the Delete button below the blog to remove it.";
-    }
-
-    if (q.includes("hello") || q.includes("hi")) {
-      return "Hello! How can I help you today?";
-    }
-
-    return "Sorry, I didn't understand. Try asking about add, edit, or delete blogs.";
-  };
-
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input };
-    const botMessage = { sender: "bot", text: getBotResponse(input) };
+    setMessages((prev) => [...prev, userMessage]);
 
-    setMessages((prev) => [...prev, userMessage, botMessage]);
+    try {
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash",
+      });
+
+      const prompt = `
+You are an AI assistant inside a React blog website.
+
+Your job is to help users use the blog application.
+
+The website allows users to:
+- Add a blog with title, image URL, and description
+- Edit an existing blog
+- Delete a blog
+- View all blogs
+
+Guidelines:
+- Give clear step-by-step instructions when helping users.
+- Keep responses short and helpful.
+- If the question is unrelated to the blog website, politely say that you only assist with this blog application.
+
+User question:
+${input}
+`;
+
+      const result = await model.generateContent(prompt);
+      //   const result = await model.generateContent(input);
+
+      const text = result.response.text();
+
+      setMessages((prev) => [...prev, { sender: "bot", text }]);
+    } catch (error) {
+      console.error(error);
+    }
+
     setInput("");
   };
 
@@ -44,14 +60,7 @@ const Chatbot = () => {
     <Card className={styles.chatbot}>
       <h3>Chat Assistant</h3>
 
-      <div
-        style={{
-          height: "200px",
-          overflowY: "auto",
-          border: "1px solid #ccc",
-          padding: "10px",
-        }}
-      >
+      <div className={styles.messages}>
         {messages.map((msg, index) => (
           <p
             key={index}
@@ -62,14 +71,14 @@ const Chatbot = () => {
         ))}
       </div>
 
-      <input
-        type="text"
-        placeholder="Ask something..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-
-      <button onClick={sendMessage}>Send</button>
+      <div className={styles.inputArea}>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask something..."
+        />
+        <button onClick={sendMessage}>Send</button>
+      </div>
     </Card>
   );
 };
